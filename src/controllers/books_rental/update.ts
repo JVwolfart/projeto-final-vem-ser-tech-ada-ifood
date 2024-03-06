@@ -17,11 +17,8 @@ export class UpdateBooksRentalController {
         res.status(404);
         return;
       }
-      console.log(newRental.book_id);
       const isAvaliable = await this.booksRentalRepository.getByBookId(newRental.book_id);
-      console.log(isAvaliable);
       if(isAvaliable){
-        console.log("Cheguei aqui");
         
         res.status(409);
         return;
