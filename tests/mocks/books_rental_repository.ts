@@ -4,7 +4,8 @@ import { BooksRental, NewBooksRental } from "../../src/controllers/models";
 export const booksRentalRepositoryMock: IBooksRentalRepository = {
   create: (newBookRental: NewBooksRental): Promise<BooksRental> => jest.fn as any,
   getById: (id: string): Promise<BooksRental | undefined> => jest.fn as any,
-  getByBookId: (id: string): Promise<BooksRental | undefined> => jest.fn as any,
+  getByBookId: (book_id: string): Promise<BooksRental | undefined> => jest.fn as any,
+  update: (id: string, newBookRental: NewBooksRental): Promise<BooksRental | undefined> => jest.fn as any,
   list: (): Promise<BooksRental[]> => jest.fn as any,
   delete: (id: string): Promise<void> => jest.fn as any,
 }

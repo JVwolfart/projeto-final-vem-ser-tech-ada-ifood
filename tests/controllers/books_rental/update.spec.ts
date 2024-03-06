@@ -47,11 +47,69 @@ describe('UpdateBooksRentalController', ()=> {
     jest.clearAllMocks()
   })
 
-  it.todo('should update and return book rental if the book rental exist') // JV
+  it('should update and return book rental if the book rental exist', async () => {
+    const {controller, newBooksRentalMock, booksRentalMock, requestMock, responseMock} = makeSut();
+    const request = {...requestMock};
+    request.body = newBooksRentalMock;
+    request.params.id = booksRentalMock.id;
+    jest.spyOn(booksRentalRepositoryMock, "update").mockResolvedValueOnce({id: booksRentalMock.id, ...newBooksRentalMock});
+    jest.spyOn(booksRentalRepositoryMock, "getById");
+    jest.spyOn(booksRentalRepositoryMock, "getByBookId").mockResolvedValueOnce(undefined);
 
-  it.todo('should return 404 statusCode and not update the book rental if there is no rental with the id provided') // JV
+    const promise = controller.update(requestMock, responseMock);
 
-  it.todo('should return 409 statusCode and not update the book rental if there is a rental with the same book id') // JV
+    await expect(promise).resolves.not.toThrow();
+    expect(booksRentalRepositoryMock.getById).toHaveBeenCalledWith(booksRentalMock.id);
+    expect(responseMock.statusCode).toEqual(200);
+  })
 
-  it.todo('should return 500 if some error occur') // JV
+  it('should return 404 statusCode and not update the book rental if there is no rental with the id provided', async () => {
+    const {controller, newBooksRentalMock, booksRentalMock, requestMock, responseMock} = makeSut();
+    const request = {...requestMock};
+    request.body = newBooksRentalMock;
+    request.params.id = booksRentalMock.id;
+    jest.spyOn(booksRentalRepositoryMock, "getById").mockResolvedValueOnce(undefined);
+    jest.spyOn(booksRentalRepositoryMock, "update");
+
+    const promise = controller.update(requestMock, responseMock);
+
+    await expect(promise).resolves.not.toThrow();
+    expect(booksRentalRepositoryMock.getById).toHaveBeenCalledWith(booksRentalMock.id);
+    expect(booksRentalRepositoryMock.update).toHaveBeenCalledTimes(0);
+    expect(responseMock.statusCode).toEqual(404);
+  }) // JV
+
+  it('should return 409 statusCode and not update the book rental if there is a rental with the same book id', async () => {
+    const {controller, newBooksRentalMock, booksRentalMock, requestMock, responseMock} = makeSut();
+    const request = {...requestMock};
+    request.body = newBooksRentalMock;
+    request.params.id = booksRentalMock.id;
+    jest.spyOn(booksRentalRepositoryMock, "getById").mockResolvedValueOnce(booksRentalMock);
+    jest.spyOn(booksRentalRepositoryMock, "getByBookId").mockResolvedValueOnce(booksRentalMock);
+    jest.spyOn(booksRentalRepositoryMock, "update");
+
+    const promise = controller.update(requestMock, responseMock);
+
+    await expect(promise).resolves.not.toThrow();
+    expect(booksRentalRepositoryMock.getById).toHaveBeenCalledWith(booksRentalMock.id);
+    expect(booksRentalRepositoryMock.getByBookId).toHaveBeenCalledWith(booksRentalMock.book_id);
+    expect(booksRentalRepositoryMock.update).toHaveBeenCalledTimes(0);
+    expect(responseMock.statusCode).toEqual(409);
+  }) // JV
+
+  it('should return 500 if some error occur', async () => {
+    const {controller, newBooksRentalMock, booksRentalMock, requestMock, responseMock} = makeSut();
+    const request = {...requestMock};
+    request.body = newBooksRentalMock;
+    request.params.id = booksRentalMock.id;
+    jest.spyOn(booksRentalRepositoryMock, "getById").mockResolvedValueOnce(booksRentalMock);
+    jest.spyOn(booksRentalRepositoryMock, "getByBookId").mockResolvedValueOnce(undefined);
+    jest.spyOn(booksRentalRepositoryMock, "update").mockRejectedValueOnce(new Error("some error"));
+
+    const promise = controller.update(requestMock, responseMock);
+
+    await expect(promise).resolves.not.toThrow();
+    expect(booksRentalRepositoryMock.getById).toHaveBeenCalledWith(booksRentalMock.id);
+    expect(responseMock.statusCode).toEqual(500);
+  }) // JV
 })
