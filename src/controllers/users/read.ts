@@ -28,6 +28,19 @@ export class ReadUsersController {
   }
 
   public async list(req: Request, res: Response): Promise<void> {
-    res.status(501).send({ message: 'not implemented yet!' }) // RS
+    try {
+      const users = await this.usersRepository.list();
+
+      if(users)
+        res.status(200).json(users)
+      else 
+        res.status(204).send()
+
+      return
+    }catch(err){ 
+      this.logger.error({ message: 'error to read users', error: err })
+      res.status(500).json({ message: 'something went wrong, try again latter!' })
+      return
+    }
   }
 }
