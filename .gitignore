@@ -5,3 +5,4 @@ coverage
 **/coverage
 **/dist
 **/*sqlite
+desktop.ini
