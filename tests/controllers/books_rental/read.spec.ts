@@ -84,8 +84,8 @@ describe('ReadBooksRentalController', ()=> {
   })
 
   describe('list', () => {
-    it.todo('should return the list of books rental')
+    it.todo('should return the list of books rental') // JV
 
-    it.todo('should return 500 if some error occur')
+    it.todo('should return 500 if some error occur') // JV
   })
 })

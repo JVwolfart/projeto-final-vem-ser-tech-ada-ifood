@@ -81,8 +81,8 @@ describe('ReadUsersController', ()=> {
   })
 
   describe('list', () => {
-    it.todo('should return the list of users')
+    it.todo('should return the list of users') // RS
 
-    it.todo('should return 500 if some error occur')
+    it.todo('should return 500 if some error occur') // RS
   })
 })

@@ -59,9 +59,9 @@ describe('UpdateBooksController', ()=> {
     expect(responseMock.statusCode).toEqual(200)
   })
 
-  it.todo('should return 404 statusCode and not update the book if there is no book with the id provided')
+  it.todo('should return 404 statusCode and not update the book if there is no book with the id provided') // RS
 
-  it.todo('should return 409 statusCode and not update the book if there is a book with the same title')
+  it.todo('should return 409 statusCode and not update the book if there is a book with the same title') // RS
 
   it('should return 500 if some error occur', async () => {
     const { controller, newBookMock, bookMock, requestMock, responseMock } = makeSut()
