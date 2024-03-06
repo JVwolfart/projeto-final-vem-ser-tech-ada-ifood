@@ -4,7 +4,9 @@ export interface IUsersRepository {
   create(newUser: NewUser): Promise<User>
   getById(id: string): Promise<User | undefined>
   getByEmail(email: string): Promise<User | undefined>
+  getByName(name: string): Promise<User | undefined>
   list(): Promise<User[]>
+  update(id: string, user: NewUser): Promise<void>
 }
 
 export interface IBooksRepository {

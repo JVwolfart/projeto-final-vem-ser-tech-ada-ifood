@@ -1,6 +1,7 @@
 import { IUsersRepository } from "../interfaces";
 import { Request, Response } from "express";
 import { Logger } from "winston";
+import { NewUser } from "../models";
 
 export class UpdateUsersController {
   constructor(
@@ -8,7 +9,34 @@ export class UpdateUsersController {
     private readonly usersRepository: IUsersRepository
   ) {}
 
-  public async update(req: Request, res: Response): Promise<void> {
-    res.status(501).send({ message: 'not implemented yet!' }) // RS
+  public async update(req: Request<any, any, NewUser>, res: Response): Promise<void> {
+    const { id } = req.params
+    const body = req.body
+
+    try {
+      const user = await this.usersRepository.getById(id)
+      if(!user){
+        res.status(404).json({ message: 'any user with the id provided was founded' })
+        return
+      }
+
+      if(user.email && user.email !== user.email || user.name && user.name !== user.name) {
+        const withTheSameEmail = await this.usersRepository.getByEmail(body.email)
+        const withTheSameName = await this.usersRepository.getByEmail(body.name)
+        if(withTheSameEmail || withTheSameName) {
+          res.status(409).json({ message: 'there is already a user with the same email provided' })
+          return
+        }
+      }
+
+      await this.usersRepository.update(id, body)
+
+      res.status(200).json({...user, ...body,})
+      return
+    }catch(err){ 
+      this.logger.error({ message: 'error to update user', error: err })
+      res.status(500).json({ message: 'something went wrong, try again later!' })
+      return
+    }
   }
 }

@@ -26,6 +26,14 @@ export class UsersRepository implements IUsersRepository {
     return user.dataValues
   }
 
+  public async getByName(name: string): Promise<User | undefined> {
+    const user = await UsersModel.findOne({ where: { name } })
+    if(!user)
+      return undefined
+
+    return user.dataValues
+  }
+
   public async list(): Promise<User[] | undefined> {
     const users = await UsersModel.findAll();
     if(!users) 
@@ -36,5 +44,9 @@ export class UsersRepository implements IUsersRepository {
       name: user.dataValues.name,
       email: user.dataValues.email
     }))
+  }
+
+  public async update(id: string, user: NewUser): Promise<void> {
+    await UsersModel.update({ ...user }, { where: { id } })
   }
 }
