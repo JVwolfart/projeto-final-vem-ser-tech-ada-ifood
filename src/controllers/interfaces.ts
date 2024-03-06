@@ -18,7 +18,8 @@ export interface IBooksRepository {
 export interface IBooksRentalRepository {
   create(newBookRental: NewBooksRental): Promise<BooksRental>
   getById(id: string): Promise<BooksRental | undefined>
-  getByBookId(id: string): Promise<BooksRental | undefined>
-  list(): Promise<BooksRental[]>
+  getByBookId(book_id: string): Promise<BooksRental | undefined>
+  list(): Promise<BooksRental[]>,
+  update(id: string, newBookRental: NewBooksRental): Promise<BooksRental | undefined>,
   delete(id: string): Promise<void>
 }

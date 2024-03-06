@@ -6,6 +6,7 @@ import { UsersModel } from '../db/models/Users';
 import { v4 } from 'uuid'
 
 export class BooksRentalRepository implements IBooksRentalRepository {
+  
   public async create(newBookRental: NewBooksRental): Promise<BooksRental> {
     const id = v4()
     const bookRental = await BooksRentalModel.create({id, ...newBookRental});
@@ -95,6 +96,16 @@ export class BooksRentalRepository implements IBooksRentalRepository {
       rental_time: bookRental.dataValues.rental_time,
       rented_at: bookRental.dataValues.rented_at,
     }))
+  }
+
+
+  public async update (id: string, newBookRental: NewBooksRental): Promise<BooksRental | undefined>{
+    const bookRental = await BooksRentalModel.findByPk(id);
+    if(!bookRental){
+      return undefined;
+    }
+    await bookRental.update({...newBookRental});
+    return bookRental.dataValues;
   }
 
   public async delete(id: string): Promise<void> {
