@@ -59,9 +59,41 @@ describe('UpdateBooksController', ()=> {
     expect(responseMock.statusCode).toEqual(200)
   })
 
-  it.todo('should return 404 statusCode and not update the book if there is no book with the id provided') // RS
+  it('should return 404 statusCode and not update the book if there is no book with the id provided' , async () => {
+    const { controller, bookMock, requestMock, responseMock } = makeSut()
 
-  it.todo('should return 409 statusCode and not update the book if there is a book with the same title') // RS
+    jest.spyOn(booksRepositoryMock, 'getById').mockResolvedValueOnce(undefined)
+    jest.spyOn(booksRepositoryMock, 'update').mockResolvedValueOnce()
+
+    const promise = controller.update(requestMock, responseMock)
+
+    await expect(promise).resolves.not.toThrow()
+    expect(booksRepositoryMock.getById).toHaveBeenCalledWith(bookMock.id)
+    expect(responseMock.statusCode).toEqual(404)
+  })
+
+  it('should return 409 statusCode and not update the book if there is a book with the same title', async () => {
+    const { controller, bookMock, requestMock, responseMock } = makeSut()
+
+    const anotherNewBookMock: Book = {
+      id: fakerEN.string.uuid(),
+      title: fakerEN.word.words(),
+      subtitle: fakerEN.word.words(),
+      publishing_company: fakerEN.company.name(),
+      published_at: fakerEN.date.anytime(),
+      authors: fakerEN.internet.userName(),
+    }
+
+    jest.spyOn(booksRepositoryMock, 'getById').mockResolvedValueOnce(anotherNewBookMock)
+    jest.spyOn(booksRepositoryMock, 'getByTitle').mockResolvedValueOnce(anotherNewBookMock)
+    jest.spyOn(booksRepositoryMock, 'update').mockResolvedValueOnce()
+
+    const promise = controller.update(requestMock, responseMock)
+
+    await expect(promise).resolves.not.toThrow()
+    expect(booksRepositoryMock.getById).toHaveBeenCalledWith(bookMock.id)
+    expect(responseMock.statusCode).toEqual(409)
+  })
 
   it('should return 500 if some error occur', async () => {
     const { controller, newBookMock, bookMock, requestMock, responseMock } = makeSut()
