@@ -89,6 +89,7 @@ describe('UpdateUsersController', () => {
 
     await expect(promise).resolves.not.toThrow()
     expect(usersRepositoryMock.getById).toHaveBeenCalledWith(userMock.id)
+    expect(usersRepositoryMock.getByEmail).toHaveBeenCalledWith(userMock.email);
     expect(responseMock.statusCode).toEqual(409)
   })
 
