@@ -93,6 +93,18 @@ describe('ReadUsersController', ()=> {
       expect(responseMock.statusCode).toEqual(200)
     })
 
+    it('should return 204 with empty body if no user was found', async () => {
+      const { controller, newUserMock, userMock, requestMock, responseMock } = makeSut()
+
+      jest.spyOn(usersRepositoryMock, 'list').mockResolvedValueOnce([])
+
+      const promise = controller.list(requestMock, responseMock)
+
+      await expect(promise).resolves.not.toThrow()
+      expect(usersRepositoryMock.list).toHaveBeenCalledTimes(1)
+      expect(responseMock.statusCode).toEqual(204)
+    })
+
     it('should return 500 if some error occur', async () => {
       const { controller, newUserMock, userMock, requestMock, responseMock } = makeSut()
       jest.spyOn(usersRepositoryMock, 'list').mockRejectedValueOnce(new Error('some error'))

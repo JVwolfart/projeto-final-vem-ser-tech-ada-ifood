@@ -31,12 +31,14 @@ export class ReadUsersController {
     try {
       const users = await this.usersRepository.list();
 
-      if(users)
+      if(users.length > 0){
         res.status(200).json(users)
-      else 
+        return;
+      }
+      else {
         res.status(204).send()
-
-      return
+        return;        
+      }
     }catch(err){ 
       this.logger.error({ message: 'error to read users', error: err })
       res.status(500).json({ message: 'something went wrong, try again latter!' })

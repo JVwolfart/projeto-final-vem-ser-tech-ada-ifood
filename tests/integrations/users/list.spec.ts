@@ -43,6 +43,14 @@ describe("GET users/", () => {
         expect(response.body).toHaveLength(2);
     })
 
+    it("should return 204 with empty body if there are no users in the database", async() => {
+        UsersModel.truncate({force: true});
+        const {app} = sut();
+        const response = await request(app).get("/v1/users");
+        expect(response.status).toEqual(204);
+        expect(response.body).toEqual({});
+    })
+
     it("should return error if something happened with database", async() => {
         await sequelize.close();
         const {app} = sut();

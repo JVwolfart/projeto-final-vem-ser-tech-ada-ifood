@@ -52,7 +52,7 @@ describe("POST users/", () => {
     it("should return error if something happened with database", async() => {
         await sequelize.close();
         const {app} = sut();
-        const response = await request(app).get("/v1/users/" + user.id);
+        const response = await request(app).post("/v1/users/");
         expect(response.status).toEqual(500);
         expect(response.body.message).toEqual("something went wrong, try again latter!");
     })

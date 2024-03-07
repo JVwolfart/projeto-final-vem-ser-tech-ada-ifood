@@ -17,6 +17,8 @@ const config: Config = {
     "!<rootDir>/src/main.ts",
     "!<rootDir>/src/routes.ts",
   ],
+  
+  collectCoverage: true
 };
 
 export default config;
