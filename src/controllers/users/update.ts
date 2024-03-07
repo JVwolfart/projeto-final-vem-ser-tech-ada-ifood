@@ -20,15 +20,6 @@ export class UpdateUsersController {
         return
       }
 
-      /*if(user.email && user.email !== user.email || user.name && user.name !== user.name) {
-        const withTheSameEmail = await this.usersRepository.getByEmail(body.email)
-        const withTheSameName = await this.usersRepository.getByEmail(body.name)
-        if(withTheSameEmail || withTheSameName) {
-          res.status(409).json({ message: 'there is already a user with the same email provided' })
-          return
-        }
-      }*/
-
       if(body.email !== user.email){
         const withTheSameEmail = await this.usersRepository.getByEmail(body.email);
         if(withTheSameEmail){
