@@ -16,7 +16,10 @@ const config: Config = {
     "!<rootDir>/src/controllers/models.ts",
     "!<rootDir>/src/main.ts",
     "!<rootDir>/src/routes.ts",
+    "!<rootDir>/src/http-server.ts"
   ],
+
+  
   
   collectCoverage: true
 };

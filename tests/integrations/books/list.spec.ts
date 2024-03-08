@@ -32,7 +32,7 @@ describe("GET books/", () => {
     })
 
     beforeAll(async () => {
-        await BooksModel.sync({force: true});
+        await BooksModel.sequelize?.sync({force: true});
         await BooksModel.bulkCreate(books);
     })
 

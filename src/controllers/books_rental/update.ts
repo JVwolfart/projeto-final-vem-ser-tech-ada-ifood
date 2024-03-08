@@ -14,13 +14,13 @@ export class UpdateBooksRentalController {
     try {
       const rental = await this.booksRentalRepository.getById(id);
       if(!rental){
-        res.status(404).json({message: "Rental not found"});
+        res.status(404).json({message: "rental not found"});
         return;
       }
       const isAvaliable = await this.booksRentalRepository.getByBookId(newRental.book_id);
       if(isAvaliable){
         
-        res.status(409).json({message: "Book already rented"});
+        res.status(409).json({message: "book already rented"});
         return;
       }
       const bookRental = await this.booksRentalRepository.update(id, newRental);

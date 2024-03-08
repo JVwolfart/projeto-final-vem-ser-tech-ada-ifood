@@ -7,7 +7,7 @@ import { BooksRentalModel } from "../../../src/db/models/BooksRental";
 import { BooksModel } from "../../../src/db/models/Books";
 import { UsersModel } from "../../../src/db/models/Users";
 
-/*describe("GET rental/books", () => {
+describe("GET rental/books/:id", () => {
 
     const users: User[] = [
         {
@@ -43,13 +43,23 @@ import { UsersModel } from "../../../src/db/models/Users";
         },
     ]
     
-    const rental: BooksRental = {
+    const rentals: BooksRental[] = [
+        {
             id: fakerEN.string.uuid(),
-            book_id: users[0].id,
-            user_id: books[0].id,
+            book_id: books[0].id,
+            user_id: users[0].id,
             rented_at: fakerEN.date.anytime(),
             rental_time: fakerEN.date.anytime(),
-    };
+        },
+
+        {
+            id: fakerEN.string.uuid(),
+            book_id: books[1].id,
+            user_id: users[1].id,
+            rented_at: fakerEN.date.anytime(),
+            rental_time: fakerEN.date.anytime(),
+        }
+    ];
     
 
     beforeEach(() => {
@@ -58,14 +68,14 @@ import { UsersModel } from "../../../src/db/models/Users";
 
     beforeAll(async () => {
         try {
-            await BooksModel.sync({force: true});
-            await UsersModel.sync({force: true});
-            await BooksRentalModel.sync({force: true});
+            await BooksModel.sequelize?.sync({force: true});
+            await UsersModel.sequelize?.sync({force: true});
+            await BooksRentalModel.sequelize?.sync({force: true});
             await UsersModel.bulkCreate(users);
             await BooksModel.bulkCreate(books);
-            await BooksRentalModel.create(rental, {});
+            await BooksRentalModel.bulkCreate(rentals);
         } catch (error) {
-            console.log(error);
+            console.log(error.message);
         }
     })
 
@@ -75,7 +85,26 @@ import { UsersModel } from "../../../src/db/models/Users";
         return {app: httpServer.app}
     }
 
-    it("test", async() => {
-        expect(1).toEqual(1);
+    it("should return book rental with the same id", async() => {
+        const {app} = sut();
+        const response = await request(app).get("/v1/rental/books/" + rentals[0].id);
+        expect(response.status).toEqual(200);
+        expect(response.body.book_id).toEqual(rentals[0].book_id);
+        expect(response.body.user_id).toEqual(rentals[0].user_id);
     })
-})*/
+
+    it("should return empty body with status code 204 if the id provided is not present in the database", async() => {
+        const {app} = sut();
+        const response = await request(app).get("/v1/rental/books/" + fakerEN.string.uuid());
+        expect(response.status).toEqual(204);
+        expect(response.body).toEqual({});
+    })
+
+    it("should return error if something happened with database", async() => {
+        await sequelize.close();
+        const {app} = sut();
+        const response = await request(app).get("/v1/rental/books/" + rentals[0].id);
+        expect(response.status).toEqual(500);
+        expect(response.body.message).toEqual("something went wrong, try again latter!");
+    })
+})

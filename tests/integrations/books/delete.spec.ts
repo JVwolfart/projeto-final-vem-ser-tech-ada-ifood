@@ -34,7 +34,7 @@ describe("DELETE books/:id", () => {
     })
 
     beforeAll(async () => {
-        await BooksModel.sync({force: true});
+        await BooksModel.sequelize?.sync({force: true});
         await BooksModel.bulkCreate(books);
     })
 

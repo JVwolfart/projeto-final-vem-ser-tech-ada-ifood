@@ -21,7 +21,7 @@ describe("GET books/:id", () => {
     })
 
     beforeAll(async () => {
-        await BooksModel.sync({force: true});
+        await BooksModel.sequelize?.sync({force: true});
         await BooksModel.create(book);
     })
 

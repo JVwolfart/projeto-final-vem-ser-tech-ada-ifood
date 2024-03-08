@@ -26,7 +26,7 @@ describe("GET users/", () => {
     })
 
     beforeAll(async () => {
-        await UsersModel.sync({force: true});
+        await UsersModel.sequelize?.sync({force: true});
         await UsersModel.bulkCreate(users);
     })
 

@@ -23,7 +23,7 @@ describe("POST users/", () => {
     })
 
     beforeAll(async () => {
-        await UsersModel.sync({force: true});
+        await UsersModel.sequelize?.sync({force: true});
         await UsersModel.create(user);
     })
 
